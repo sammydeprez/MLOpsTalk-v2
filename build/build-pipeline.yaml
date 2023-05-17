@@ -50,7 +50,18 @@ steps:
     scriptLocation: inlineScript
     useGlobalConfig: false
     inlineScript: |
-      az ml environment create --resource-group $(resourceGroupName) --workspace-name $(machineLearningWorkspace) --registry-name $(containerRegistry) --file ml\mlops\aml-cli-v2\azureml\train\train-env.yml
+      az ml environment create --resource-group $(resourceGroupName) --workspace-name mlw-mlops-elxvl7tirtvum --registry-name crmlopselxvl7tirtvum --file ml\mlops\aml-cli-v2\azureml\train\train-env.yml
+
+- task: AzureCLI@2
+  name: 'MLCreateEnvironment2'
+  displayName: 'ML - Create Environment'
+  inputs:
+    azureSubscription: $(azureServiceConnection)
+    scriptType: bash
+    scriptLocation: inlineScript
+    useGlobalConfig: false
+    inlineScript: |
+      az ml environment create --resource-group $(resourceGroupName) --workspace-name $(DeployInfrastructure.machineLearningWorkspace) --registry-name $(DeployInfrastructure.containerRegistry) --file ml\mlops\aml-cli-v2\azureml\train\train-env.yml
 
 - task: AzureCLI@2
   name: 'MLCreateDataSet'
