@@ -28,15 +28,18 @@ steps:
   displayName: 'Deploy Infrastructure'
   inputs:
     azureSubscription: $(azureServiceConnection)
-    scriptType: bash
+    scriptType: pscore
     scriptLocation: inlineScript
-    useGlobalConfig: false
     inlineScript: |
-      $jsonResult = az deployment group create --resource-group $(resourceGroupName) --template-file infra/main.bicep --parameters infra/parameters.json
-      $workspaceName = $jsonResult.properties.outputs.machineLearningWorkspaceName.value
-      $containerRegistryName = $jsonResult.properties.outputs.containerRegistry.value
-      Write-Host "##vso[task.setvariable variable=mlwName;isoutput=true]"$workspaceName
-      Write-Host "##vso[task.setvariable variable=crName;isoutput=true]"$containerRegistryName
+      $out = az deployment group create --resource-group $(resourceGroupName) --template-file infra/main.bicep --parameters infra/parameters.json | convertfrom-json | foreach properties | foreach outputs
+      $provisionOutputs = [PSCustomObject]@{}
+      $out | Get-Member -MemberType NoteProperty | ForEach-Object {
+
+          $name = $_.name
+          $provisionOutputs | Add-Member -MemberType NoteProperty -Name $name -value $out.$name.value
+          Write-Host "##vso[task.setvariable variable=$($name);isOutput=true]$($out.$name.value)"
+      }
+      $provisionOutputs
 
 - task: AzureCLI@2
   name: 'MLCreateEnvironment'
@@ -47,7 +50,7 @@ steps:
     scriptLocation: inlineScript
     useGlobalConfig: false
     inlineScript: |
-      az ml environment create --resource-group $(resourceGroupName) --workspace-name $(mlwName) --registry-name $(crName) --file ml\mlops\aml-cli-v2\azureml\train\train-env.yml
+      az ml environment create --resource-group $(resourceGroupName) --workspace-name $(machineLearningWorkspace) --registry-name $(containerRegistry) --file ml\mlops\aml-cli-v2\azureml\train\train-env.yml
 
 - task: AzureCLI@2
   name: 'MLCreateDataSet'
