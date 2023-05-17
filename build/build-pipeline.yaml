@@ -43,7 +43,7 @@ steps:
       $provisionOutputs
 
 - task: AzureCLI@2
-  name: 'MLCreateEnvironment'
+  name: 'PRINTVAR'
   displayName: 'ML - Create Environment'
   inputs:
     azureSubscription: $(azureServiceConnection)
