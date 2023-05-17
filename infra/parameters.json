@@ -8,6 +8,9 @@
     "environment": {
         "value": "demo"
     },
+    "computeName": {
+        "value": "compute"
+    },
     "adminUserIds": {
         "value": ["606e466f-c982-4580-9992-d98ac9465838"]
     }

@@ -5,6 +5,7 @@ param storageAccountId string
 param keyvaultId string
 param containerRegistryId string
 param applicationInsightsId string
+param computeName string
 
 resource workspace 'Microsoft.MachineLearningServices/workspaces@2022-12-01-preview' = {
   tags: tags
@@ -26,9 +27,10 @@ resource workspace 'Microsoft.MachineLearningServices/workspaces@2022-12-01-prev
   }
 }
 
-resource amlci 'Microsoft.MachineLearningServices/workspaces/computes@2022-12-01' = {
+resource amlci 'Microsoft.MachineLearningServices/workspaces/computes@2022-12-01-preview' = {
   parent: workspace
-  name: 'compute'
+  name: computeName
+  location: location
   properties: {
     computeType: 'AmlCompute'
     properties: {

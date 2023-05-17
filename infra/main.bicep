@@ -7,6 +7,7 @@ param location string = 'westeurope'
 param projectName string = 'mlops'
 param environment string = 'dev'
 param adminUserIds array = []
+param computeName string = 'cpu-cluster'
 var postFix = uniqueString(subscription().subscriptionId, projectName, environment)
 
 
@@ -75,5 +76,6 @@ module mlw 'modules/machinelearningworkspace.bicep' = {
     containerRegistryId: cr.outputs.id
     keyvaultId: kv.outputs.id
     storageAccountId: st.outputs.id
+    computeName: computeName
   }
 }
