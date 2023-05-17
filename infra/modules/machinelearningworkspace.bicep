@@ -25,3 +25,18 @@ resource workspace 'Microsoft.MachineLearningServices/workspaces@2022-12-01-prev
     containerRegistry: containerRegistryId
   }
 }
+
+resource amlci 'Microsoft.MachineLearningServices/workspaces/computes@2022-12-01' = {
+  parent: workspace
+  name: 'compute'
+  properties: {
+    computeType: 'AmlCompute'
+    properties: {
+      vmSize: 'STANDARD_DS3_V2'
+      scaleSettings: {
+        minNodeCount: 0
+        maxNodeCount: 4
+      }
+    }
+  }
+}
