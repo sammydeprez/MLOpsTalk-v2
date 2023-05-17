@@ -79,3 +79,10 @@ module mlw 'modules/machinelearningworkspace.bicep' = {
     computeName: computeName
   }
 }
+
+output storageAccountName string = storageAccountName
+output containerRegistry string = containerRegistryName
+output keyVaultName string = keyVaultName
+output applicationInsightsName string = appInsightsName
+output machineLearningWorkspaceName string = machineLearningWorkspaceName
+output computeName string = computeName

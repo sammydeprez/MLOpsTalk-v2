@@ -32,7 +32,11 @@ steps:
     scriptLocation: inlineScript
     useGlobalConfig: false
     inlineScript: |
-      az deployment group create --resource-group $(resourceGroupName) --template-file infra/main.bicep --parameters infra/parameters.json
+      $jsonResult = az deployment group create --resource-group $(resourceGroupName) --template-file infra/main.bicep --parameters infra/parameters.json
+      $workspaceName = $jsonResult.properties.outputs.machineLearningWorkspaceName.value
+      $containerRegistryName = $jsonResult.properties.outputs.containerRegistry.value
+      Write-Host "##vso[task.setvariable variable=mlwName;isoutput=true]"$workspaceName
+      Write-Host "##vso[task.setvariable variable=crName;isoutput=true]"$containerRegistryName
 
 - task: AzureCLI@2
   name: 'MLCreateEnvironment'
@@ -43,7 +47,7 @@ steps:
     scriptLocation: inlineScript
     useGlobalConfig: false
     inlineScript: |
-      az ml environment create --resource-group $(resourceGroupName) --workspace-name mlw-mlops-elxvl7tirtvum --registry-name crmlopselxvl7tirtvum --file ml\mlops\aml-cli-v2\azureml\train\train-env.yml
+      az ml environment create --resource-group $(resourceGroupName) --workspace-name $(mlwName) --registry-name $(crName) --file ml\mlops\aml-cli-v2\azureml\train\train-env.yml
 
 - task: AzureCLI@2
   name: 'MLCreateDataSet'
