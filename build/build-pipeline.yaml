@@ -24,6 +24,7 @@ steps:
 
 - task: AzureCLI@2
   name: 'DeployInfrastructure'
+  displayName: 'Deploy Infrastructure'
   inputs:
     azureSubscription: $(azureServiceConnection)
     scriptType: bash
@@ -35,6 +36,7 @@ steps:
 
 - task: AzureCLI@2
   name: 'MLCreateEnvironment'
+  displayName: 'ML - Create Environment'
   inputs:
     azureSubscription: $(azureServiceConnection)
     scriptType: bash
@@ -44,7 +46,8 @@ steps:
       az ml environment create --resource-group $(resourceGroupName) --file ml\mlops\aml-cli-v2\azureml\train\train-env.yml
 
 - task: AzureCLI@2
-  name: 'MLCreateEnvironment'
+  name: 'MLCreateDataSet'
+  displayName: 'ML - Create DataSet'
   inputs:
     azureSubscription: $(azureServiceConnection)
     scriptType: bash
