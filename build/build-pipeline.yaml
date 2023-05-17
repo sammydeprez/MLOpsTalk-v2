@@ -19,4 +19,4 @@ steps:
     useGlobalConfig: false
     inlineScript: |
       az --version
-      az deployment group create --resource-group $(resourceGroupName) --template-file ../infra/main.bicep --parameters ../infra/parameters.json
+      az deployment group create --resource-group $(resourceGroupName) --template-file infra/main.bicep --parameters infra/parameters.json
