@@ -1,0 +1,22 @@
+trigger:
+- master
+
+name: Deploy Bicep files
+
+variables:
+  vmImageName: 'ubuntu-latest'
+  azureServiceConnection: 'SC_Devops'
+  resourceGroupName: 'rg-mlops'
+pool:
+  vmImage: $(vmImageName)
+
+steps:
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: $(azureServiceConnection)
+    scriptType: bash
+    scriptLocation: inlineScript
+    useGlobalConfig: false
+    inlineScript: |
+      az --version
+      az deployment group create --resource-group $(resourceGroupName) --template-file ../infra/main.bicep --parameters ../infra/parameters.json
