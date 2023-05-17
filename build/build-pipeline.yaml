@@ -21,6 +21,7 @@ steps:
     useGlobalConfig: false
     inlineScript: |
       az extension add -n ml
+      az --version
 
 - task: AzureCLI@2
   name: 'DeployInfrastructure'
@@ -31,7 +32,6 @@ steps:
     scriptLocation: inlineScript
     useGlobalConfig: false
     inlineScript: |
-      az --version
       az deployment group create --resource-group $(resourceGroupName) --template-file infra/main.bicep --parameters infra/parameters.json
 
 - task: AzureCLI@2
@@ -43,7 +43,7 @@ steps:
     scriptLocation: inlineScript
     useGlobalConfig: false
     inlineScript: |
-      az ml environment create --resource-group $(resourceGroupName) --file ml\mlops\aml-cli-v2\azureml\train\train-env.yml
+      az ml environment create --resource-group $(resourceGroupName) --workspace-name mlw-mlops-elxvl7tirtvum --registry-name crmlopselxvl7tirtvum --file ml\mlops\aml-cli-v2\azureml\train\train-env.yml
 
 - task: AzureCLI@2
   name: 'MLCreateDataSet'
@@ -55,3 +55,14 @@ steps:
     useGlobalConfig: false
     inlineScript: |
       az ml data create --resource-group $(resourceGroupName) --file ml\mlops\aml-cli-v2\azureml\train\data.yml
+
+- task: AzureCLI@2
+  name: 'MLSubmitTrainingPipeline'
+  displayName: 'ML - Submit Training Pipeline'
+  inputs:
+    azureSubscription: $(azureServiceConnection)
+    scriptType: bash
+    scriptLocation: inlineScript
+    useGlobalConfig: false
+    inlineScript: |
+      az ml job create --file ml\mlops\aml-cli-v2\azureml\train\pipeline.yml
