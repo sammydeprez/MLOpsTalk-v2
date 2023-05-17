@@ -73,4 +73,26 @@ steps:
     scriptLocation: inlineScript
     useGlobalConfig: false
     inlineScript: |
-      az ml job create --subscription $(subscriptionId) --resource-group $(resourceGroupName) --workspace-name $(DeployInfrastructure.machineLearningWorkspace) --file ml/mlops/aml-cli-v2/azureml/train/pipeline.yml
+      az ml job create --subscription $(subscriptionId) --resource-group $(resourceGroupName) --workspace-name $(DeployInfrastructure.machineLearningWorkspace) --file ml/mlops/aml-cli-v2/azureml/train/pipeline.yml --stream
+
+- task: AzureCLI@2
+  name: 'MLCreateOnlineEndpoint'
+  displayName: 'ML - Create Online Endpoint'
+  inputs:
+    azureSubscription: $(azureServiceConnection)
+    scriptType: bash
+    scriptLocation: inlineScript
+    useGlobalConfig: false
+    inlineScript: |
+      az ml online-endpoint create --subscription $(subscriptionId) --resource-group $(resourceGroupName) --workspace-name $(DeployInfrastructure.machineLearningWorkspace) --file ml/mlops/aml-cli-v2/azureml/deploy/online/online-endpoint.yml
+
+- task: AzureCLI@2
+  name: 'MLDeployModelToEndpoint'
+  displayName: 'ML - Deploy Model to Endpoint'
+  inputs:
+    azureSubscription: $(azureServiceConnection)
+    scriptType: bash
+    scriptLocation: inlineScript
+    useGlobalConfig: false
+    inlineScript: |
+      az ml online-deployment create --subscription $(subscriptionId) --resource-group $(resourceGroupName) --workspace-name $(DeployInfrastructure.machineLearningWorkspace) --file ml/mlops/aml-cli-v2/azureml/deploy/online/online-deployment.yml
