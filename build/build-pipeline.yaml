@@ -6,6 +6,7 @@ name: Deploy Bicep files
 variables:
   vmImageName: 'ubuntu-latest'
   azureServiceConnection: 'SC_Devops'
+  subscriptionId: '23529470-ba17-4d8a-9f0c-064e63a49c33'
   resourceGroupName: 'rg-mlops'
 pool:
   vmImage: $(vmImageName)
@@ -50,7 +51,7 @@ steps:
     scriptLocation: inlineScript
     useGlobalConfig: false
     inlineScript: |
-      az ml environment create --resource-group $(resourceGroupName) --workspace-name mlw-mlops-elxvl7tirtvum --registry-name crmlopselxvl7tirtvum --file ml\mlops\aml-cli-v2\azureml\train\train-env.yml
+      az ml environment create --subscription $(subscriptionId) --resource-group $(resourceGroupName) --workspace-name mlw-mlops-elxvl7tirtvum --file ml\mlops\aml-cli-v2\azureml\train\train-env.yml
 
 - task: AzureCLI@2
   name: 'MLCreateEnvironment2'

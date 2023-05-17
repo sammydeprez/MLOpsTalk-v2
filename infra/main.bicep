@@ -86,3 +86,4 @@ output keyVaultName string = keyVaultName
 output applicationInsightsName string = appInsightsName
 output machineLearningWorkspace string = machineLearningWorkspaceName
 output computeName string = computeName
+output subscriptionId string = subscription().subscriptionId
