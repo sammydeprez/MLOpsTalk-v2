@@ -23,7 +23,7 @@ steps:
       az extension add -n ml
 
 - task: AzureCLI@2
-  name: 'Deploy Infrastructure'
+  name: 'DeployInfrastructure'
   inputs:
     azureSubscription: $(azureServiceConnection)
     scriptType: bash
@@ -34,7 +34,7 @@ steps:
       az deployment group create --resource-group $(resourceGroupName) --template-file infra/main.bicep --parameters infra/parameters.json
 
 - task: AzureCLI@2
-  name: 'ML - Create Environment'
+  name: 'MLCreateEnvironment'
   inputs:
     azureSubscription: $(azureServiceConnection)
     scriptType: bash
@@ -44,7 +44,7 @@ steps:
       az ml environment create --resource-group $(resourceGroupName) --file ml\mlops\aml-cli-v2\azureml\train\train-env.yml
 
 - task: AzureCLI@2
-  name: 'ML - Create Environment'
+  name: 'MLCreateEnvironment'
   inputs:
     azureSubscription: $(azureServiceConnection)
     scriptType: bash
