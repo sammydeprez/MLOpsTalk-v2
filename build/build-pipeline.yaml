@@ -43,18 +43,6 @@ steps:
       $provisionOutputs
 
 - task: AzureCLI@2
-  name: 'PRINTVAR'
-  displayName: 'ML - Create Environment'
-  inputs:
-    azureSubscription: $(azureServiceConnection)
-    scriptType: bash
-    scriptLocation: inlineScript
-    useGlobalConfig: false
-    inlineScript: |
-      echo $(DeployInfrastructure.machineLearningWorkspace)
-
-
-- task: AzureCLI@2
   name: 'MLCreateEnvironment'
   displayName: 'ML - Create Environment'
   inputs:
