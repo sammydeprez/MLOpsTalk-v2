@@ -36,7 +36,7 @@ resource amlci 'Microsoft.MachineLearningServices/workspaces/computes@2022-12-01
     properties: {
       vmSize: 'STANDARD_DS3_V2'
       scaleSettings: {
-        minNodeCount: 0
+        minNodeCount: 1
         maxNodeCount: 4
       }
     }
